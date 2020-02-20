@@ -51,6 +51,7 @@ import org.wildfly.security.http.Scope;
 import org.xnio.SslClientAuthMode;
 
 import io.undertow.security.api.SecurityContext;
+import io.undertow.security.impl.ExternalAuthenticationMechanism;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.RenegotiationRequiredException;
 import io.undertow.server.SSLSessionInfo;
@@ -386,6 +387,11 @@ public class ElytronHttpExchange implements HttpExchangeSpi {
         if (httpServerExchange.isResponseStarted() == false) {
             httpServerExchange.setStatusCode(statusCode);
         }
+    }
+
+    @Override
+    public String getRemoteUser() {
+        return httpServerExchange.getAttachment(ExternalAuthenticationMechanism.EXTERNAL_PRINCIPAL);
     }
 
     /**
