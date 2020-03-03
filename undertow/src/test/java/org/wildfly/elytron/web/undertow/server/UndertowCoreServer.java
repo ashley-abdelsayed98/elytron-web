@@ -218,7 +218,11 @@ public class UndertowCoreServer extends UndertowServer {
 
                     sessionManager.registerSessionListener(sessionListener);
 
-                    elytronContextHandlerBuilder.setHttpExchangeSupplier(exchange -> new ElytronHttpExchange(exchange, Collections.emptyMap(), sessionListener));
+                    elytronContextHandlerBuilder.setHttpExchangeSupplier(exchange ->
+                            {
+                                exchange.putAttachment(HttpServerExchange.REMOTE_USER, "remoteUser");
+                                return new ElytronHttpExchange(exchange, Collections.emptyMap(), sessionListener);
+                            });
 
                     sessionManager.start();
                 }
